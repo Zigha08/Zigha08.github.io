@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-PORT = 9191
+PORT = 9292
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):

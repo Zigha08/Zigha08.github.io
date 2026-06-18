@@ -1,10 +1,9 @@
 {
-  "risk_level": "medium",
-  "findings": [
-    {
-      "issue": "innerHTML with concatenation — XSS risk",
-      "location": "JS rendering",
-      "recommendation": "Use textContent"
-    }
+  "risk_level": "low",
+  "findings": [],
+  "notes": [
+    "No innerHTML with user data (XSS-safe).",
+    "No hardcoded secrets.",
+    "No external CDN (CSP-friendly)."
   ]
 }
