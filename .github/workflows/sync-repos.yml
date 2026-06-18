@@ -90,15 +90,19 @@ jobs:
               new_cards = f.read().rstrip() + '\n        '
           with open('index.html', encoding='utf-8') as f:
               html = f.read()
-          # Cari blok <div class="projects-grid">...</div>
+          # Cari HANYA <div class="projects-grid"> pertama (tanpa -manual suffix).
+          # Sync script JANGAN sentuh projects-grid-manual (untuk lab/card manual).
           pattern = re.compile(
               r'(<div class="projects-grid">)(.*?)(</div>)',
               re.DOTALL
           )
-          m = pattern.search(html)
-          if not m:
+          matches = list(pattern.finditer(html))
+          if not matches:
               print('ERROR: <div class="projects-grid"> not found', file=sys.stderr)
               sys.exit(1)
+          if len(matches) > 1:
+              print(f'WARNING: found {len(matches)} projects-grid blocks, patching only the first', file=sys.stderr)
+          m = matches[0]
           new_html = html[:m.start(2)] + '\n' + new_cards + html[m.end(2):]
           pathlib.Path('index.html').write_text(new_html, encoding='utf-8')
           print('Patched index.html: replaced projects-grid block')
