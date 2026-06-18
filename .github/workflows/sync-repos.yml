@@ -1,0 +1,125 @@
+name: Sync GitHub repos to portfolio
+
+# Workflow ini menyinkronkan daftar repo publik akun Zigha08 ke section
+# Projects di index.html, lalu commit & push supaya GitHub Pages
+# auto-rebuild dengan data terbaru.
+
+on:
+  # Jadwal harian supaya portfolio selalu fresh (cron UTC jam 06:00).
+  schedule:
+    - cron: "0 6 * * *"
+
+  # Trigger manual dari tab Actions (untuk test atau force-refresh).
+  workflow_dispatch:
+
+  # Trigger dari repo lain via repository_dispatch event.
+  # Mis. dari Sentinel: gh api repos/Zigha08/Zigha08.github.io/dispatches \
+  #   -f event_type=sync-repos
+  repository_dispatch:
+    types: [sync-repos]
+
+concurrency:
+  group: sync-repos
+  cancel-in-progress: false
+
+permissions:
+  contents: write   # push commit ke main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout portfolio
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.REPO_SYNC_TOKEN || secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      - name: Fetch user's public repos
+        id: fetch
+        env:
+          GH_TOKEN: ${{ secrets.REPO_SYNC_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Ambil semua repo publik user (paginated).
+          page=1
+          all="[]"
+          while : ; do
+            chunk=$(gh api "users/Zigha08/repos?per_page=100&page=${page}&type=public" \
+              --jq '[.[] | {name: .name, description: .description, html_url: .html_url, language: .language, stargazers_count: .stargazers_count, forks_count: .forks_count, pushed_at: .pushed_at, topics: .topics, archived: .archived}]')
+            count=$(echo "$chunk" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))")
+            if [ "$count" = "0" ]; then break; fi
+            all=$(python3 -c "import json; a=json.loads('''$all'''); b=json.loads('''$chunk'''); print(json.dumps(a+b))")
+            page=$((page + 1))
+            if [ "$page" -gt 10 ]; then break; fi   # safety, max 1000 repo
+          done
+          # Simpan ke file (env vars punya batas ukuran & karakter).
+          echo "$all" > /tmp/repos.json
+          echo "::notice title=Repos fetched::$(python3 -c "import json; print(len(json.load(open('/tmp/repos.json'))))") repos"
+
+      - name: Render project cards
+        id: render
+        env:
+          GITHUB_REPOS_JSON: ${{ env.REPOS_JSON }}
+        run: |
+          python3 scripts/render_projects.py > /tmp/projects.html
+          # Sanity check: hasil harus berisi minimal 1 card.
+          if ! grep -q "project-card" /tmp/projects.html; then
+            echo "::error::Render output kosong atau corrupt"
+            exit 1
+          fi
+          card_count=$(grep -c "project-card" /tmp/projects.html || true)
+          echo "::notice title=Cards rendered::$card_count cards"
+
+      - name: Patch index.html
+        env:
+          GITHUB_REPOS_JSON: ${{ env.REPOS_JSON }}
+        run: |
+          set -euo pipefail
+          # Render ulang (di step ini kita juga perlu REPOS_JSON).
+          REPOS_JSON=$(cat /tmp/repos.json) python3 scripts/render_projects.py > /tmp/projects.html
+
+          # Backup index.html sebelum patch.
+          cp index.html /tmp/index.html.bak
+
+          # Pakai python script untuk patch — lebih reliable dari sed.
+          python3 - <<'PY'
+          import re, sys, pathlib
+          with open('/tmp/projects.html', encoding='utf-8') as f:
+              new_cards = f.read().rstrip() + '\n        '
+          with open('index.html', encoding='utf-8') as f:
+              html = f.read()
+          # Cari blok <div class="projects-grid">...</div>
+          pattern = re.compile(
+              r'(<div class="projects-grid">)(.*?)(</div>)',
+              re.DOTALL
+          )
+          m = pattern.search(html)
+          if not m:
+              print('ERROR: <div class="projects-grid"> not found', file=sys.stderr)
+              sys.exit(1)
+          new_html = html[:m.start(2)] + '\n' + new_cards + html[m.end(2):]
+          pathlib.Path('index.html').write_text(new_html, encoding='utf-8')
+          print('Patched index.html: replaced projects-grid block')
+          PY
+
+      - name: Show diff (for debug)
+        run: |
+          diff -u /tmp/index.html.bak index.html | head -80 || true
+
+      - name: Commit & push
+        env:
+          GH_TOKEN: ${{ secrets.REPO_SYNC_TOKEN || secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet index.html; then
+            echo "::notice::No changes to commit — portfolio already in sync."
+            exit 0
+          fi
+          git add index.html
+          git commit -m "Sync GitHub repos to portfolio ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
+          git push origin main
+          echo "::notice title=Pushed::Portfolio updated."
