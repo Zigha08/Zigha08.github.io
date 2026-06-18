@@ -38,7 +38,7 @@ from datetime import datetime, timezone
 PINNED_REPOS: set[str] = set()
 
 # Repositori yang di-exclude (mis. portfolio itu sendiri, atau repo test/private).
-EXCLUDED_REPOS: set[str] = {"Zigha08.github.io"}
+EXCLUDED_REPOS: set[str] = {"Zigha08.github.io", "Zigha08"}
 
 # Maksimum jumlah card yang di-render.
 MAX_CARDS = 6
@@ -88,17 +88,36 @@ def render_card(repo: dict) -> str:
         stats_bits.append(f'<span class="stat-pill" title="Forks">⑂ {forks}</span>')
     stats_html = " ".join(stats_bits)
 
+    # Last-update "ago" hint (lebih jujur dari tanggal absolut).
+    # Mis. "3 days ago", "2 weeks ago" — bahasa Inggris, formal tapi hangat.
+    from datetime import datetime, timezone
+    now = datetime.now(timezone.utc)
+    delta = now - dt
+    days = delta.days
+    if days == 0:
+        ago = "today"
+    elif days == 1:
+        ago = "yesterday"
+    elif days < 7:
+        ago = f"{days} days ago"
+    elif days < 30:
+        weeks = days // 7
+        ago = f"{weeks} week{'s' if weeks != 1 else ''} ago"
+    elif days < 365:
+        months = days // 30
+        ago = f"{months} month{'s' if months != 1 else ''} ago"
+    else:
+        years = days // 365
+        ago = f"{years} year{'s' if years != 1 else ''} ago"
+
     return f'''          <article class="project-card">
-            <p class="project-tag">Open Source · Last update {date_label}</p>
+            <p class="project-tag">Open Source · Updated {ago}</p>
             <h3 class="project-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{name}</a></h3>
             <p class="project-desc">{desc}</p>
             <div class="project-meta">
               <span class="project-lang">{lang}</span>
               {topic_tags}
               {stats_html}
-            </div>
-            <div class="project-links">
-              <a class="project-link" href="{url}" target="_blank" rel="noopener noreferrer">View on GitHub →</a>
             </div>
           </article>'''
 

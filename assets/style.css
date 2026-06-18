@@ -297,6 +297,12 @@ a:hover { border-bottom-color: currentColor; }
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
+.stat-suffix {
+  font-size: 0.55em;
+  font-weight: 400;
+  margin-left: 0.1em;
+  opacity: 0.7;
+}
 .stat-label {
   font-family: var(--font-mono);
   font-size: var(--fs-eyebrow);
@@ -465,6 +471,8 @@ a:hover { border-bottom-color: currentColor; }
 .writing-list a:hover { padding-left: var(--sp-2); color: var(--c-accent); }
 .writing-title { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 500; }
 .writing-meta { font-family: var(--font-mono); font-size: var(--fs-eyebrow); color: var(--c-fg-dim); letter-spacing: 0.1em; white-space: nowrap; }
+.writing-stub .writing-title { color: var(--c-fg-muted); }
+.writing-stub em { font-style: normal; color: var(--c-accent); opacity: 0.7; }
 
 /* ============================================================
    Contact
@@ -581,4 +589,19 @@ a:hover { border-bottom-color: currentColor; }
 .cmdk-footer kbd {
   font-family: inherit; background: var(--c-bg); border: 1px solid var(--c-border);
   border-radius: 2px; padding: 0 0.3rem; line-height: 1.5; font-size: 0.7rem;
+}
+
+/* ============================================================
+   Accessibility: respect users who request reduced motion.
+   WCAG 2.3.3 (AAA). Disables all transitions, animations, and
+   smooth-scroll behaviors for users who get motion sick.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html { scroll-behavior: auto; }
 }

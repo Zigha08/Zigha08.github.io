@@ -86,8 +86,10 @@
   }
 
   // ---------- Stats count-up ----------
+  // Disabled: stats are now static (see index.html). Block kept in case we
+  // re-enable later with a different threshold.
   const statNums = document.querySelectorAll(".stat-num[data-count]");
-  if (statNums.length && "IntersectionObserver" in window) {
+  if (false && statNums.length && "IntersectionObserver" in window) {
     const counterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
