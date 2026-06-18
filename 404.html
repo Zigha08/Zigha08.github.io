@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Page not found — Ghazi Abid Al Azzam's portfolio.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0a0a0c">
+  <meta name="color-scheme" content="dark">
+
+  <title>404 — Page not found · Ghazi Abid Al Azzam</title>
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0a0c'/><text x='50%25' y='52%25' dominant-baseline='central' text-anchor='middle' font-family='serif' font-size='24' fill='%2339ff14'>Z</text></svg>">
+  <link rel="stylesheet" href="assets/style.css">
+
+  <style>
+    /* 404-specific layout — overrides site main padding to center vertically */
+    .notfound {
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 1.5rem;
+    }
+    .notfound-code {
+      font-family: var(--font-display);
+      font-size: clamp(6rem, 14vw, 10rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--c-accent);
+      margin: 0;
+      text-shadow: 0 0 60px color-mix(in srgb, var(--c-accent) 30%, transparent);
+    }
+    .notfound-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3vw + 0.5rem, 2rem);
+      margin: 1rem 0 0.5rem;
+      letter-spacing: -0.01em;
+    }
+    .notfound-lead {
+      font-size: 1.05rem;
+      color: var(--c-fg-muted);
+      max-width: 48ch;
+      margin: 0 0 2rem;
+    }
+    .notfound-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark">Z</span>
+        <span class="brand-text">Ghazi Abid Al Azzam</span>
+      </a>
+      <nav class="primary-nav" aria-label="Primary">
+        <a href="/#about">About</a>
+        <a href="/#projects">Projects</a>
+        <a href="/#writing">Writing</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="container notfound">
+      <p class="notfound-code">404</p>
+      <h1 class="notfound-title">Page not found</h1>
+      <p class="notfound-lead">
+        The page you're looking for doesn't exist, was moved, or never did.
+        The link you followed might be outdated.
+      </p>
+      <div class="notfound-actions">
+        <a class="btn btn-primary" href="/">Back to portfolio</a>
+        <a class="btn btn-ghost" href="/#writing">Read writeups</a>
+        <a class="btn btn-ghost" href="/#contact">Get in touch</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 Ghazi Abid Al Azzam (@Zigha08). Built with intent.</p>
+      <p class="footer-meta">Aspiring Penetration Tester · Cybersecurity Enthusiast</p>
+    </div>
+  </footer>
+</body>
+</html>

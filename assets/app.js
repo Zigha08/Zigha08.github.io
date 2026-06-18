@@ -7,6 +7,22 @@
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
+  // ---------- Footer last-updated ----------
+  // Pakai document.lastModified (otomatis di-set oleh GitHub Pages dari
+  // Last-Modified HTTP header = waktu push terakhir). Format: "Jun 18, 2026".
+  const updatedEl = document.getElementById("last-updated");
+  if (updatedEl) {
+    const lm = new Date(document.lastModified);
+    if (!isNaN(lm.getTime())) {
+      updatedEl.textContent = lm.toLocaleDateString("en-US", {
+        year: "numeric", month: "short", day: "numeric",
+      });
+      updatedEl.setAttribute("datetime", lm.toISOString());
+    } else {
+      updatedEl.textContent = "recently";
+    }
+  }
+
   // ---------- Time-of-day greeting ----------
   const greet = document.getElementById("greeting-time");
   if (greet) {

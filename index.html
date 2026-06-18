@@ -29,6 +29,39 @@
   <link rel="manifest" href="manifest.json">
   <link rel="alternate" type="application/rss+xml" title="Ghazi Abid Al Azzam" href="https://github.com/Zigha08.atom">
 
+  <!-- JSON-LD: Person schema for rich search results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ghazi Abid Al Azzam",
+    "alternateName": "Zigha08",
+    "url": "https://zigha08.github.io/",
+    "image": "https://zigha08.github.io/assets/og-image.svg",
+    "jobTitle": "Aspiring Penetration Tester",
+    "description": "Self-taught cybersecurity enthusiast focused on web application testing, network reconnaissance, and offensive tooling.",
+    "knowsAbout": [
+      "Penetration Testing",
+      "Web Application Security",
+      "Network Reconnaissance",
+      "OWASP Top 10",
+      "Python",
+      "SQL Injection",
+      "Cross-Site Scripting (XSS)",
+      "Bug Bounty"
+    ],
+    "sameAs": [
+      "https://github.com/Zigha08",
+      "https://www.linkedin.com/in/ghazi-abid-al-azzam/"
+    ],
+    "email": "mailto:ghaziabidalazzam3@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "ID"
+    }
+  }
+  </script>
+
   <title>Ghazi Abid Al Azzam — Penetration Tester Trainee</title>
   <link rel="stylesheet" href="assets/style.css">
   <script src="assets/app.js" defer></script>
@@ -102,20 +135,20 @@
     <section class="stats-bar" aria-label="Quick stats">
       <div class="container stats-grid">
         <div class="stat">
-          <span class="stat-num" data-count="42">0</span>
-          <span class="stat-label">CTFs solved</span>
+          <span class="stat-num" data-count="5">0</span>
+          <span class="stat-label">Open-source tools</span>
         </div>
         <div class="stat">
-          <span class="stat-num" data-count="3">0</span>
-          <span class="stat-label">Open-source tools</span>
+          <span class="stat-num" data-count="1">0</span>
+          <span class="stat-label">Writeups published</span>
         </div>
         <div class="stat">
           <span class="stat-num" data-count="2">0</span>
           <span class="stat-label">Years self-taught</span>
         </div>
         <div class="stat">
-          <span class="stat-num" data-count="8">0</span>
-          <span class="stat-label">Writeups published</span>
+          <span class="stat-num" data-count="100">0</span>
+          <span class="stat-label">% open source</span>
         </div>
       </div>
     </section>
@@ -406,7 +439,10 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>© <span id="year">2026</span> Ghazi Abid Al Azzam (@Zigha08). Built with intent.</p>
-      <p class="footer-meta">Aspiring Penetration Tester · Cybersecurity Enthusiast</p>
+      <p class="footer-meta">
+        Aspiring Penetration Tester · Cybersecurity Enthusiast
+        · <span class="footer-updated">Last updated <time id="last-updated" datetime="">—</time></span>
+      </p>
     </div>
   </footer>
 
