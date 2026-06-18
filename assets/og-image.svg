@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Ghazi Abid Al Azzam — Penetration Tester Trainee">
+  <defs>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0"/>
+    </filter>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0a0c"/>
+      <stop offset="100%" stop-color="#16161a"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" filter="url(#grain)"/>
+
+  <!-- Brand mark -->
+  <g transform="translate(80, 80)">
+    <path d="M40 0 L80 25 L80 65 L40 90 L0 65 L0 25 Z" fill="none" stroke="#39ff14" stroke-width="2"/>
+    <text x="40" y="60" text-anchor="middle" font-family="Georgia, serif" font-size="36" font-weight="500" fill="#39ff14">Z</text>
+  </g>
+
+  <!-- Eyebrow -->
+  <text x="80" y="240" font-family="JetBrains Mono, monospace" font-size="20" letter-spacing="6" fill="#39ff14">PORTFOLIO · 2026</text>
+
+  <!-- Title -->
+  <text x="80" y="340" font-family="Georgia, 'Times New Roman', serif" font-size="84" font-weight="500" fill="#e8e6e1">Ghazi Abid Al Azzam</text>
+  <text x="80" y="420" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-style="italic" fill="#8a8880">Aspiring Penetration Tester</text>
+  <text x="80" y="475" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-style="italic" fill="#8a8880">Cybersecurity Enthusiast</text>
+
+  <!-- Footer line -->
+  <line x1="80" y1="530" x2="1120" y2="530" stroke="#2a2823" stroke-width="1"/>
+  <text x="80" y="570" font-family="JetBrains Mono, monospace" font-size="20" fill="#5a5852">github.com/Zigha08</text>
+  <text x="1120" y="570" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="20" fill="#5a5852">zigha08.github.io</text>
+</svg>
