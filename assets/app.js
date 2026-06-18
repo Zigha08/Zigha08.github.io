@@ -122,13 +122,40 @@
         return;
       }
 
-      const subject = encodeURIComponent("Portfolio contact from " + name);
-      const body = encodeURIComponent(`${message}
+      // Progressive enhancement: if form has data-endpoint (e.g. Formspree ID),
+      // POST as JSON; on failure fall back to mailto: so the user is never stranded.
+      const endpoint = form.dataset.endpoint;
+      const submit = async () => {
+        if (endpoint) {
+          try {
+            const ctrl = new AbortController();
+            const t = setTimeout(() => ctrl.abort(), 8000);
+            const res = await fetch(endpoint, {
+              method: "POST",
+              headers: { "Accept": "application/json", "Content-Type": "application/json" },
+              body: JSON.stringify({ name, email, message, _subject: "Portfolio contact from " + name }),
+              signal: ctrl.signal,
+            });
+            clearTimeout(t);
+            if (res.ok) {
+              if (formMsg) { formMsg.textContent = "Thanks — message sent. I'll reply within a few days."; formMsg.dataset.state = "ok"; }
+              form.reset();
+              return;
+            }
+            // Non-2xx: fall through to mailto fallback below
+          } catch (_err) {
+            // Network/CORS/timeout: fall through to mailto fallback below
+          }
+        }
+        const subject = encodeURIComponent("Portfolio contact from " + name);
+        const body = encodeURIComponent(`${message}
 
 — ${name} (${email})`);
-      const href = "mailto:ghaziabidalazzam3@gmail.com?subject=" + subject + "&body=" + body;
-      window.location.href = href;
-      if (formMsg) { formMsg.textContent = "Opening your email client…"; formMsg.dataset.state = "ok"; }
+        const href = "mailto:ghaziabidalazzam3@gmail.com?subject=" + subject + "&body=" + body;
+        window.location.href = href;
+        if (formMsg) { formMsg.textContent = "Opening your email client..."; formMsg.dataset.state = "ok"; }
+      };
+      submit();
     });
   }
 
