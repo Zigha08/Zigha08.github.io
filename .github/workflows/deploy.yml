@@ -1,0 +1,104 @@
+name: Deploy to GitHub Pages
+
+# Workflow ini deploy source code dari repo private (portfolio-source) ke
+# public site (Zigha08.github.io) via gh-pages branch.
+#
+# Setup one-time:
+#   1. User bikin Personal Access Token (classic) di https://github.com/settings/tokens
+#      dengan scope: repo (Full control of private repositories)
+#   2. Simpan sebagai secret di repo ini: Settings > Secrets and variables >
+#      Actions > New repository secret
+#      - Name:  GH_DEPLOY_TOKEN
+#      - Value: <paste PAT di sini>
+#
+# Arsitektur:
+#   portfolio-source (PRIVATE) --push--> gh-pages branch --served by--> zigha08.github.io
+#
+# Setiap push ke main di portfolio-source akan trigger workflow ini, yang:
+#   1. Checkout source code (default GITHUB_TOKEN, read-only)
+#   2. Checkout gh-pages branch di Zigha08.github.io (pakai GH_DEPLOY_TOKEN)
+#   3. Replace content dengan source files
+#   4. Push ke gh-pages branch
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# concurrency: cancel in-progress deploys kalau ada push baru masuk
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to gh-pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read   # cuma butuh read untuk checkout source
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Checkout gh-pages branch (target)
+        uses: actions/checkout@v4
+        with:
+          repository: Zigha08/Zigha08.github.io
+          ref: gh-pages
+          path: deploy
+          token: ${{ secrets.GH_DEPLOY_TOKEN }}
+          fetch-depth: 1
+
+      - name: Replace gh-pages content with source
+        run: |
+          set -euo pipefail
+          cd deploy
+
+          # Hapus SEMUA file existing di gh-pages (kecuali .git dan .nojekyll)
+          # .nojekyll dipertahankan agar GitHub Pages serve file apa adanya
+          # tanpa proses Jekyll (file dengan leading _ tidak akan di-skip).
+          find . -mindepth 1 -maxdepth 1 \
+            -not -name '.git' \
+            -not -name '.nojekyll' \
+            -exec rm -rf {} +
+
+          # Copy source files dari working directory
+          shopt -s dotglob nullglob
+          for item in ../*; do
+            # Skip file/folder ini:
+            case "$(basename "$item")" in
+              deploy)        continue ;;  # working dir for checked-out target
+              .git)          continue ;;  # source repo's git dir
+              .github)       continue ;;  # workflows TIDAK di-deploy
+            esac
+            cp -r "$item" .
+          done
+
+          # Tambah .nojekyll supaya GitHub Pages skip Jekyll processing
+          touch .nojekyll
+
+          # Tampilkan ringkasan apa yang akan di-deploy
+          echo "=== Files to deploy ==="
+          ls -la
+          echo ""
+          echo "=== Total size ==="
+          du -sh .
+
+      - name: Commit and push to gh-pages
+        run: |
+          set -euo pipefail
+          cd deploy
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          # Allow empty diff (kalau tidak ada perubahan, skip push)
+          if git diff --cached --quiet; then
+            echo "No changes to deploy."
+            exit 0
+          fi
+          git commit -m "Deploy from portfolio-source @ $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push origin gh-pages
+          echo "::notice title=Deployed::Portfolio deployed to gh-pages branch."
