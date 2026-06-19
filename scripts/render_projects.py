@@ -110,7 +110,7 @@ def render_card(repo: dict) -> str:
         ago = f"{years} year{'s' if years != 1 else ''} ago"
 
     return f'''          <article class="project-card">
-            <p class="project-tag">Open Source · Updated {ago}</p>
+            <p class="project-tag">Project · Updated {ago}</p>
             <h3 class="project-title"><a href="{url}" target="_blank" rel="noopener noreferrer">{name}</a></h3>
             <p class="project-desc">{desc}</p>
             <div class="project-meta">
@@ -158,8 +158,10 @@ def main() -> int:
     filtered = filtered[:MAX_CARDS]
 
     if not filtered:
-        print("::error::No repos to render after filtering", file=sys.stderr)
-        return 1
+        # Tidak ada repo publik yang match. Exit 0 dengan notice supaya workflow
+        # cron TIDAK gagal (semua repo sedang private).
+        print("::notice::No public repos to render (all private or filtered out). Skipping index.html patch.", file=sys.stderr)
+        return 0
 
     cards = "\n".join(render_card(r) for r in filtered)
     print(cards)
