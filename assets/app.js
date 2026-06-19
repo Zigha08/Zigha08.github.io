@@ -85,33 +85,6 @@
     onScroll();
   }
 
-  // ---------- Stats count-up ----------
-  // Disabled: stats are now static (see index.html). Block kept in case we
-  // re-enable later with a different threshold.
-  const statNums = document.querySelectorAll(".stat-num[data-count]");
-  if (false && statNums.length && "IntersectionObserver" in window) {
-    const counterObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const target = parseInt(el.dataset.count, 10) || 0;
-        const dur = 1200;
-        const start = performance.now();
-        const step = (now) => {
-          const t = Math.min((now - start) / dur, 1);
-          const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
-          el.textContent = String(Math.round(target * eased));
-          if (t < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-        counterObserver.unobserve(el);
-      });
-    }, { threshold: 0.5 });
-    statNums.forEach(el => counterObserver.observe(el));
-  } else {
-    statNums.forEach(el => el.textContent = el.dataset.count);
-  }
-
   // ---------- Contact form ----------
   const form = document.getElementById("contact-form");
   const formMsg = document.getElementById("form-msg");
@@ -214,7 +187,7 @@
     { kind: "Jump", title: "Contact",  hint: "G C", action: () => jumpTo("#contact") },
     { kind: "Action", title: "Copy email address", hint: "C E", action: () => copyEmail() },
     { kind: "Action", title: "Open GitHub profile", hint: "G G", action: () => window.open("https://github.com/Zigha08", "_blank", "noopener") },
-    { kind: "Action", title: "Open LinkedIn",      hint: "G L", action: () => window.open("https://linkedin.com/in/ghazi-abid-al-azzam-a78363296", "_blank", "noopener") },
+    { kind: "Action", title: "Open LinkedIn",      hint: "G L", action: () => window.open("https://www.linkedin.com/in/ghazi-abid-al-azzam-a78363296", "_blank", "noopener") },
     { kind: "Action", title: "Download CV",        hint: "D C", action: () => { const a = document.createElement("a"); a.href = "assets/ghazi-abid-al-azzam-cv.pdf"; a.download = ""; a.click(); } },
   ];
 

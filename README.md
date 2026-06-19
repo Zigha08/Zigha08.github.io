@@ -75,4 +75,4 @@ Built using three combined skills:
 
 - **GitHub:** [github.com/Zigha08](https://github.com/Zigha08)
 - **Email:** ghaziabidalazzam3@gmail.com
-- **LinkedIn:** [linkedin.com/in/ghazi-abid-al-azzam-a78363296](https://linkedin.com/in/ghazi-abid-al-azzam-a78363296)
+- **LinkedIn:** [linkedin.com/in/ghazi-abid-al-azzam-a78363296](https://www.linkedin.com/in/ghazi-abid-al-azzam-a78363296)

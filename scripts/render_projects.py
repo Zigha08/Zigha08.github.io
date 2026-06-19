@@ -90,7 +90,6 @@ def render_card(repo: dict) -> str:
 
     # Last-update "ago" hint (lebih jujur dari tanggal absolut).
     # Mis. "3 days ago", "2 weeks ago" — bahasa Inggris, formal tapi hangat.
-    from datetime import datetime, timezone
     now = datetime.now(timezone.utc)
     delta = now - dt
     days = delta.days
