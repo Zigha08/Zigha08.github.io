@@ -88,6 +88,8 @@ jobs:
           du -sh .
 
       - name: Commit and push to gh-pages
+        env:
+          GH_DEPLOY_TOKEN: ${{ secrets.GH_DEPLOY_TOKEN }}
         run: |
           set -euo pipefail
           cd deploy
@@ -100,5 +102,7 @@ jobs:
             exit 0
           fi
           git commit -m "Deploy from portfolio-source @ $(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          git push origin gh-pages
+          # Embed PAT di push URL karena actions/checkout tidak persist
+          # token di remote URL untuk cross-repo checkout.
+          git push "https://x-access-token:${GH_DEPLOY_TOKEN}@github.com/Zigha08/Zigha08.github.io.git" gh-pages
           echo "::notice title=Deployed::Portfolio deployed to gh-pages branch."
