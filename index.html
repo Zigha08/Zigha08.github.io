@@ -136,8 +136,12 @@
     <section class="stats-bar" aria-label="Quick stats">
       <div class="container stats-grid">
         <div class="stat">
-          <span class="stat-num">5</span>
-          <span class="stat-label">Projects in progress</span>
+          <span class="stat-num">1</span>
+          <span class="stat-label">Tool released</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">214</span>
+          <span class="stat-label">Tests passing</span>
         </div>
         <div class="stat">
           <span class="stat-num">1</span>
@@ -197,6 +201,15 @@
         <h2 id="now-title" class="section-title">What I'm working on right now.</h2>
         <p class="now-as-of">As of <time datetime="2026-06">June 2026</time></p>
         <ul class="now-list">
+          <li>
+            <span class="now-tag">shipped</span>
+            <div>
+              <strong>Sentinel v0.4.2 released</strong> — modular cybersecurity
+              framework with 8 modules and 5 output formats. 214 tests,
+              66% coverage, GitHub Actions CI, and a Gradio-based web demo.
+              Open-source at <a href="https://github.com/Zigha08/Sentinel">github.com/Zigha08/Sentinel</a>.
+            </div>
+          </li>
           <li>
             <span class="now-tag">building</span>
             <div>
@@ -276,15 +289,19 @@
         <p class="section-label">04 — Projects</p>
         <h2 id="projects-title" class="section-title">Selected work.</h2>
         <div class="projects-grid">
-          <article class="project-card project-card-placeholder">
-            <p class="project-tag">In private beta · 5 projects</p>
-            <h3 class="project-title">Security tooling in progress</h3>
-            <p class="project-desc">Five Python tools covering reconnaissance, web vulnerability scanning, and authentication auditing. Currently in private beta — being hardened, documented, and tested against public CTF ranges before public release. Each tool ships with a stable version, full README, and at least one writeup behind it.</p>
+          <article class="project-card">
+            <p class="project-tag">Released · v0.4.2 · 2026</p>
+            <h3 class="project-title"><a href="https://github.com/Zigha08/Sentinel">Sentinel — Cybersecurity Framework</a></h3>
+            <p class="project-desc">Modular Python CLI for reconnaissance, vulnerability scanning, and security auditing. 8 specialized modules (recon, fingerprint, discovery, scanner, bruter, nmap_scan, analysis, batch) producing findings in 5 output formats (txt, json, md, html, sarif). Architecture includes WAF/CDN/service-version detection, parallel async port scanning, DNS caching, stealth UA rotation, and a Gradio-based web demo. Tested end-to-end against scanme.nmap.org (Nmap's official public test target).</p>
             <div class="project-meta">
-              <span>Recon</span>
-              <span>Web app</span>
-              <span>Auth</span>
-              <span class="project-meta-status">Coming soon</span>
+              <span>Python 3.11+</span>
+              <span>8 modules</span>
+              <span>5 formats</span>
+              <span class="project-meta-status">214 tests · 66% coverage</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/Zigha08/Sentinel">View repo →</a>
+              <a href="https://github.com/Zigha08/Sentinel/releases/tag/v0.4.2">v0.4.2 release →</a>
             </div>
           </article>
         </div>
